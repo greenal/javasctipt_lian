@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+#GB_overlay {
+  background-image: url(../images/overlay.png); 
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width:  100%;
+  height: 100%;
+}
+
+* html #GB_overlay {
+  background-color: #000;
+  background-color: transparent;
+  background-image: url(../images/blank.gif);
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../images/overlay.png", sizingMethod="scale");
+}
+
+#GB_window {
+  top: 100px;
+  left: 0px;
+  position: absolute;
+  background: #fff;
+  border: 5px solid #aaa;
+  overflow: auto;
+  width: 400px;
+  height: 400px;
+  z-index: 150;
+}
+
+#GB_frame {
+  border: 0;
+  overflow: auto;
+  width: 100%;
+  height: 378px; 
+  font-size:13px;     
+}
+
+#GB_caption {
+  font: 12px bold helvetica, verdana, sans-serif;
+  color: #fff;
+  background: #888;
+  padding: 2px 0 2px 5px;
+  margin: 0;
+  text-align: left;
+}
+
+#GB_window img {
+  position: absolute;
+  top: 2px;
+  right: 5px;
+  cursor: pointer;
+  cursor: hand;
+}
+
+</style>
+<script>
+var GB_DONE = false;
+var GB_HEIGHT = 400;
+var GB_WIDTH = 400;
+
+function GB_show(caption, url, height, width) {
+  $("GB_window").remove();
+  GB_HEIGHT = height || 400;
+  GB_WIDTH = width || 400;
+  if(!GB_DONE) {
+    $(document.body)
+      .append("<div id='GB_overlay'></div><div id='GB_window'><div id='GB_caption'></div>"
+        + "<img src='../images/close.gif' alt='Close window'/></div>");
+    $("#GB_window img").click(GB_hide);
+    $("#GB_overlay").click(GB_hide);
+    $(window).resize(GB_position);
+    GB_DONE = true;
+  }
+
+  $("#GB_frame").remove();  
+//下面的append方法里的内容为弹出框的内容，可以自行设定
+  $("#GB_window").append("<div id='GB_frame' align='center'><form id='privilegeform' action="+url+" method='post'><p>&nbsp;&nbsp;&nbsp;名称：<input type='text' name='name' id='name' size='30'></p><p>常量名：<input type='text' name='constantName' id='constantName' size='30'></p><p>&nbsp;&nbsp;&nbsp;URL：&nbsp;<input type='text' name='url' id='url' size='30'></p><p>target：<select style='width:210px' id='target'><option selected='selected' value='_self'>_self</option><option value='_blank'>_blank</option><option value='_parent'>_parent</option><option value='_top'>_top</option></select></p><p>&nbsp;&nbsp;描述：<input type='text' name='description' id='description' size='30'></p><p><input type='button' onclick='enter()' value='确定'><input type='button' onclick='enter()' value='sdf'>&nbsp;<input type='button' value='取消' id='cancer'></p></form></div>");
+  $("#GB_caption").html(caption);
+  $("#GB_overlay").show();
+  $("#cancer").click(GB_hide);
+  GB_position();
+  $("#GB_window").slideDown("slow");  
+}
+
+function GB_hide() {
+  	$("#GB_window").slideUp("slow");
+	$("#GB_overlay").hide();
+}
+
+function GB_position() {
+  var de = document.documentElement;
+  var w = self.innerWidth || (de&&de.clientWidth) || document.body.clientWidth;
+  $("#GB_window").css({width:GB_WIDTH+"px",height:GB_HEIGHT+"px",
+    left: ((w - GB_WIDTH)/2)+"px" });
+  $("#GB_frame").css("height",GB_HEIGHT - 32 +"px");
+}
+	alert("sdf");
+}
+</script>
+</head>
+
+<body>
+</body>
+</html>
